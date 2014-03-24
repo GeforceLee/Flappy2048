@@ -15,9 +15,11 @@ public class GameManager : MonoBehaviour {
 	private float enemyUpdateTime = 0;
 	private GameStatus currentGameStatus = GameStatus.Over;
 
-	public Vector3[,] allPositions = new Vector3[3,2]{ {new Vector3(3.6f,-2.17f,0),new Vector3(3.6f,2.17f,0)},
-		{new Vector3(3.6f,-2.17f,0),new Vector3(3.6f,-0.7f,0)},
-		{new Vector3(3.6f,2.17f,0),new Vector3(3.6f,0.7f,0)}};
+	public Vector3[,] allPositions = new Vector3[3,2]{ 
+		{new Vector3(3.6f,-2.16f,0),new Vector3(3.6f,2.16f,0)},
+		{new Vector3(3.6f,-2.16f,0),new Vector3(3.6f,-0.72f,0)},
+		{new Vector3(3.6f,2.16f,0),new Vector3(3.6f,0.72f,0)}
+	};
 
 
 	void Start(){

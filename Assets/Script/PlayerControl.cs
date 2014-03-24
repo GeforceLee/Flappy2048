@@ -4,6 +4,7 @@ using System.Collections;
 public class PlayerControl : MonoBehaviour {
 
 	public int groundAddForce = 200;
+	public int jumpAddForce = 200;
 
 	// Use this for initialization
 	void Start () {
@@ -31,17 +32,13 @@ public class PlayerControl : MonoBehaviour {
 
 	void FixedUpdate(){
 		bool jump = false;
-		if (Input.GetMouseButtonUp(0))
+		if (Input.GetMouseButtonDown(0) || Input.GetKeyDown("space"))
 			jump = true;
-
 		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended) 
 			jump = true;
 		if(jump){
 			rigidbody2D.velocity = Vector3.zero;
-			rigidbody2D.AddForce(new Vector2(0,groundAddForce));
+			rigidbody2D.AddForce(new Vector2(0,jumpAddForce));
 		}
-			
-
 	}
-
 }
