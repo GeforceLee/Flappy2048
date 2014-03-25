@@ -81,10 +81,17 @@ public class GameManager : MonoBehaviour {
 
 		PlayerPrefs.SetInt("BestScore",bestScore);
 		if(enableGameCenter){
-//			Social.ReportScore(bestScore,gameCenterKey, result => {
-//			});
+			Social.ReportScore(bestScore,gameCenterKey, result => {
+			});
 		}
 	}
+
+	public void showGameCenterScore(){
+		if(enableGameCenter){
+			Social.ShowLeaderboardUI();
+		}
+	}
+
 
 	public void OnScoreCollid(){
 		if(currentGameStatus == GameStatus.Start  && addScoreTime > 0.5){
@@ -104,6 +111,9 @@ public class GameManager : MonoBehaviour {
 			bestScoreUI.GetComponent<tk2dTextMesh>().text = ""+bestScore;
 		}
 	}
+
+
+
 
 	void CreateEmeny(){
 		
@@ -126,5 +136,8 @@ public class GameManager : MonoBehaviour {
 		}
 		addScoreTime += Time.deltaTime;
 	}
+
+
+
 }
 
