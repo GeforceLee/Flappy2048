@@ -76,6 +76,8 @@ public class PlayerControl : MonoBehaviour {
 	}
 
 	public void playFly(){
+		if(audioSource.isPlaying)
+			return;
 		audioSource.clip = audioFly;
 		audioSource.Play();
 	}
