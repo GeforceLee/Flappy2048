@@ -7,6 +7,8 @@ public class PlayerControl : MonoBehaviour {
 	public int jumpAddForce = 200;
 	public GameObject scoreText;
 
+	int i = 0;
+
 	Color color2 = new Color(0xee/255.0f,0xe4/255.0f,0xda/255.0f);
 	Color color4 = new Color(0xed/255.0f,0xe0/255.0f,0xc8/255.0f);
 	Color color8 = new Color(0xf2/255.0f,0xb1/255.0f,0x79/255.0f);
@@ -25,11 +27,28 @@ public class PlayerControl : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+		i = 0;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if (gameManager.currentGameStatus == GameManager.GameStatus.Over) {
+			return;
+		}
+		bool jump = false;
+		if (Input.GetMouseButtonDown (0) || Input.GetKeyDown ("space")|| Input.GetKeyDown ("up")) {
+			//pressLog();
+			jump = true;
+		}
+		if (Input.touchCount > 0 && Input.GetTouch (0).phase == TouchPhase.Ended) {
+			jump = true;
+			//pressLog();
+		}
+		if(jump){
+			rigidbody2D.velocity = Vector3.zero;
+			//Debug.Log("Jump");
+			rigidbody2D.AddForce(new Vector2(0,jumpAddForce));
+		}
 	}
 
 
@@ -90,17 +109,12 @@ public class PlayerControl : MonoBehaviour {
 
 
 	void FixedUpdate(){
-		if(gameManager.currentGameStatus == GameManager.GameStatus.Over)
-			return;
-		bool jump = false;
-		if (Input.GetMouseButtonDown(0) || Input.GetKeyDown("space"))
-			jump = true;
-		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended) 
-			jump = true;
-		if(jump){
-			rigidbody2D.velocity = Vector3.zero;
-			Debug.Log("Jump");
-			rigidbody2D.AddForce(new Vector2(0,jumpAddForce));
-		}
+
 	}
+
+	void pressLog(){
+		i++;
+		Debug.Log (i);
+
+		}
 }
