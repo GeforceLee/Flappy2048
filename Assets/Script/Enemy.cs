@@ -19,6 +19,6 @@ public class Enemy : MonoBehaviour {
 	void Update () {
 		updateTime += Time.deltaTime;
 
-		gameObject.transform.position = Vector3.Lerp(startPosition,targetPosition,updateTime/3);
+		gameObject.transform.position = Vector3.Lerp(startPosition,targetPosition,updateTime/deadTime);
 	}
 }
