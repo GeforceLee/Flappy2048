@@ -3,12 +3,13 @@ using System.Collections;
 
 public class PlayerControl : MonoBehaviour {
 
-	public int groundAddForce = 200;
+	public int groundAddForce = 110;
 	public int jumpAddForce = 200;
 
+	GameManager gameManager;
 	// Use this for initialization
 	void Start () {
-	
+		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 	}
 	
 	// Update is called once per frame
@@ -17,22 +18,32 @@ public class PlayerControl : MonoBehaviour {
 	}
 
 
+
+
+
 	void OnTriggerEnter2D(Collider2D coll){
+		bool gameOver = false;
 		if(coll.gameObject.name == "Floor"){
 			rigidbody2D.velocity = Vector3.zero;
-//			Debug.Log("Floor");
+			gameOver = true;
 			rigidbody2D.AddForce(new Vector2(0,groundAddForce));
 		}else if (coll.gameObject.name == "Celiling"){
 			rigidbody2D.velocity = Vector3.down;
-		}else if(coll.gameObject.name == "Enemy"){
-//			Debug.Log("si le");
+			gameOver = true;
+		}else if(coll.gameObject.tag == "Enemy"){
+			gameOver = true;
 		}
+		if(gameOver)
+			gameManager.GameOver();
 	}
 
 
 	void FixedUpdate(){
+		if(gameManager.currentGameStatus == GameManager.GameStatus.Over)
+			return;
 		bool jump = false;
 		if (Input.GetMouseButtonDown(0) || Input.GetKeyDown("space"))
+			Debug.Log("Jump");
 			jump = true;
 		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended) 
 			jump = true;
