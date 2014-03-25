@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerControl : MonoBehaviour {
 
 	public int groundAddForce = 100;
-	public int jumpAddForce = 200;
+
 	public GameObject scoreText;
 
 	Color color2 = new Color(0xee/255.0f,0xe4/255.0f,0xda/255.0f);
@@ -25,6 +25,7 @@ public class PlayerControl : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+
 	}
 	
 	// Update is called once per frame
@@ -32,7 +33,10 @@ public class PlayerControl : MonoBehaviour {
 	
 	}
 
-
+	public void SetTap(){
+		gameObject.GetComponent<tk2dSprite>().color = color2;
+		scoreText.GetComponent<tk2dTextMesh>().text = "Tap";
+	}
 	public void SetScore(int score){
 		Color t;
 		Color textColor = new Color(1,1,1);
@@ -89,18 +93,5 @@ public class PlayerControl : MonoBehaviour {
 	}
 
 
-	void FixedUpdate(){
-		if(gameManager.currentGameStatus == GameManager.GameStatus.Over)
-			return;
-		bool jump = false;
-		if (Input.GetMouseButtonDown(0) || Input.GetKeyDown("space"))
-			jump = true;
-		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended) 
-			jump = true;
-		if(jump){
-			rigidbody2D.velocity = Vector3.zero;
-			Debug.Log("Jump");
-			rigidbody2D.AddForce(new Vector2(0,jumpAddForce));
-		}
-	}
+
 }

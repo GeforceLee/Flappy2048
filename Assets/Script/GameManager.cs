@@ -5,7 +5,8 @@ public class GameManager : MonoBehaviour {
 
 	public enum GameStatus{
 		Start,
-		Over
+		Over,
+		Ready
 	};
 
 
@@ -18,7 +19,7 @@ public class GameManager : MonoBehaviour {
 	private float enemyUpdateTime = 0;
 	public GameStatus currentGameStatus = GameStatus.Start;
 	public GameObject socreAnima;
-
+	public int jumpAddForce = 200;
 	private float addScoreTime = 0;
 
 
@@ -34,7 +35,15 @@ public class GameManager : MonoBehaviour {
 	};
 
 
+	private Rigidbody2D playerRigid;
+
+	void Awake(){
+		Application.targetFrameRate = 60;
+		playerRigid = playerControl.GetComponent<Rigidbody2D>();
+	}
 	void Start(){
+		
+
 		string channel = null;
 		string mta_appkey = null;
 #if UNITY_IPHONE
@@ -66,22 +75,30 @@ public class GameManager : MonoBehaviour {
 		GameOver();
 	}
 
-	public void StartGame(){
-		if(currentGameStatus == GameStatus.Start)
+	public void ReadyGame(){
+		if(currentGameStatus != GameStatus.Over)
 			return;
-		enemyUpdateTime = 0;
-		bestScore = PlayerPrefs.GetInt("BestScore");
+
+
+		currentGameStatus = GameStatus.Ready;
+		startUI.GetComponent<Animator>().SetTrigger("Hide");
 		currentScore = 0;
 		bestScoreUI.GetComponent<tk2dTextMesh>().text = ""+bestScore;
 		currentScoreUI.GetComponent<tk2dTextMesh>().text = ""+currentScore;
-		startUI.GetComponent<Animator>().SetTrigger("Hide");
-		playerControl.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-		playerControl.transform.position = new Vector3(-2.16f,0,0);
-		playerControl.GetComponent<Rigidbody2D>().AddForce(new Vector2(0,100));
-		GameObject[] enemys =  GameObject.FindGameObjectsWithTag("Enemy");
-		foreach(GameObject en in enemys){
-			Destroy(en);
-		}
+	}
+
+	public void StartGame(){
+		if(currentGameStatus == GameStatus.Start)
+			return;
+
+		enemyUpdateTime = 0;
+		bestScore = PlayerPrefs.GetInt("BestScore");
+
+
+
+		playerRigid.isKinematic = false;
+		playerRigid.AddForce(new Vector2(0,150));
+
 		playerControl.GetComponent<PlayerControl>().SetScore(0);
 		currentGameStatus = GameStatus.Start;
 	}
@@ -90,10 +107,20 @@ public class GameManager : MonoBehaviour {
 
 		if(currentGameStatus == GameStatus.Over)
 			return;
+
+		playerControl.GetComponent<PlayerControl>().SetTap();
 		currentGameStatus = GameStatus.Over;
 		startUI.GetComponent<Animator>().SetTrigger("Show");
-
+		playerRigid.isKinematic = true;
+		playerRigid.velocity = Vector2.zero;
+		playerControl.transform.position = new Vector3(-2.16f,0,0);
 		PlayerPrefs.SetInt("BestScore",bestScore);
+
+		GameObject[] enemys =  GameObject.FindGameObjectsWithTag("Enemy");
+		foreach(GameObject en in enemys){
+			Destroy(en);
+		}
+
 		if(enableGameCenter){
 			Social.ReportScore(bestScore,gameCenterKey, result => {
 			});
@@ -150,9 +177,28 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 		addScoreTime += Time.deltaTime;
+//	}
+//
+//	void FixedUpdate(){
+		if(currentGameStatus == GameStatus.Over)
+			return;
+
+		bool jump = false;
+		if (Input.GetMouseButtonDown(0) || Input.GetKeyDown("space"))
+			jump = true;
+		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended) 
+			jump = true;
+		if(jump){
+			if(currentGameStatus == GameStatus.Ready){
+				StartGame();
+			}else{
+				playerRigid.velocity = Vector3.zero;
+				Debug.Log("Jump");
+				playerRigid.AddForce(new Vector2(0,jumpAddForce));
+			}
+
+		}
 	}
-
-
 
 }
 
