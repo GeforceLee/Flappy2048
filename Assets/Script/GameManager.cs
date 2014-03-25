@@ -35,6 +35,19 @@ public class GameManager : MonoBehaviour {
 
 
 	void Start(){
+		string channel = null;
+		string mta_appkey = null;
+#if UNITY_IPHONE
+		channel = "iOS";
+		mta_appkey = "Aqc1101259487";
+#elif UNITY_ANDROID
+		channel = "Android";
+		mta_appkey = "Aqc1101259487";
+#endif
+		MtaService.SetInstallChannel(channel);
+		MtaService.StartStatServiceWithAppKey(mta_appkey);
+
+
 		bestScore = PlayerPrefs.GetInt("BestScore");
 		currentScoreUI.GetComponent<tk2dTextMesh>().text = "0";
 		bestScoreUI.GetComponent<tk2dTextMesh>().text = ""+bestScore;
