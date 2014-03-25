@@ -35,6 +35,9 @@ public class GameManager : MonoBehaviour {
 
 
 	void Start(){
+		bestScore = PlayerPrefs.GetInt("BestScore");
+		currentScoreUI.GetComponent<tk2dTextMesh>().text = "0";
+		bestScoreUI.GetComponent<tk2dTextMesh>().text = ""+bestScore;
 		Social.localUser.Authenticate (success => {
 			if (success) {
 				Debug.Log ("Authentication successful");
@@ -53,18 +56,15 @@ public class GameManager : MonoBehaviour {
 	public void StartGame(){
 		if(currentGameStatus == GameStatus.Start)
 			return;
-
-
 		enemyUpdateTime = 0;
 		bestScore = PlayerPrefs.GetInt("BestScore");
 		currentScore = 0;
 		bestScoreUI.GetComponent<tk2dTextMesh>().text = ""+bestScore;
 		currentScoreUI.GetComponent<tk2dTextMesh>().text = ""+currentScore;
 		startUI.GetComponent<Animator>().SetTrigger("Hide");
-//		playerControl.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-//		playerControl.transform.position = new Vector3(-2.16f,0,0);
-//		playerControl.GetComponent<Rigidbody2D>().AddForce(new Vector2(0,100));
-		playerControl.GetComponent<Rigidbody2D>().isKinematic = false;
+		playerControl.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+		playerControl.transform.position = new Vector3(-2.16f,0,0);
+		playerControl.GetComponent<Rigidbody2D>().AddForce(new Vector2(0,100));
 		GameObject[] enemys =  GameObject.FindGameObjectsWithTag("Enemy");
 		foreach(GameObject en in enemys){
 			Destroy(en);
@@ -76,7 +76,6 @@ public class GameManager : MonoBehaviour {
 
 		if(currentGameStatus == GameStatus.Over)
 			return;
-		playerControl.GetComponent<Rigidbody2D>().isKinematic = true;
 		currentGameStatus = GameStatus.Over;
 		startUI.GetComponent<Animator>().SetTrigger("Show");
 
@@ -119,7 +118,6 @@ public class GameManager : MonoBehaviour {
 	void Update(){
 
 		if(currentGameStatus == GameStatus.Start){
-//			Debug.Log(enemyUpdateTime);
 			enemyUpdateTime += Time.deltaTime;
 			if(enemyUpdateTime > enemyDurdingTime){
 				CreateEmeny();

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PlayerControl : MonoBehaviour {
 
-	public int groundAddForce = 110;
+	public int groundAddForce = 100;
 	public int jumpAddForce = 200;
 
 	GameManager gameManager;
@@ -43,12 +43,12 @@ public class PlayerControl : MonoBehaviour {
 			return;
 		bool jump = false;
 		if (Input.GetMouseButtonDown(0) || Input.GetKeyDown("space"))
-			Debug.Log("Jump");
 			jump = true;
 		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended) 
 			jump = true;
 		if(jump){
 			rigidbody2D.velocity = Vector3.zero;
+			Debug.Log("Jump");
 			rigidbody2D.AddForce(new Vector2(0,jumpAddForce));
 		}
 	}
