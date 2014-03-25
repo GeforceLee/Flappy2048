@@ -69,6 +69,7 @@ public class GameManager : MonoBehaviour {
 		foreach(GameObject en in enemys){
 			Destroy(en);
 		}
+		playerControl.GetComponent<PlayerControl>().SetScore(0);
 		currentGameStatus = GameStatus.Start;
 	}
 
@@ -106,6 +107,7 @@ public class GameManager : MonoBehaviour {
 		currentScore++;
 		Instantiate(socreAnima,socreAnima.transform.position,Quaternion.identity);
 		currentScoreUI.GetComponent<tk2dTextMesh>().text = ""+currentScore;
+		playerControl.GetComponent<PlayerControl>().SetScore(currentScore);
 		if(currentScore> bestScore){
 			bestScore = currentScore;
 			bestScoreUI.GetComponent<tk2dTextMesh>().text = ""+bestScore;
