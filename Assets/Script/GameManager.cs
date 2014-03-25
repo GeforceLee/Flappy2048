@@ -34,6 +34,10 @@ public class GameManager : MonoBehaviour {
 		{new Vector3(3.6f,2.16f,0),new Vector3(3.6f,0.72f,0)}
 	};
 
+	private AudioSource audioSource;
+	public AudioClip audioPlay;
+	public AudioClip audioPoint;
+
 
 	private Rigidbody2D playerRigid;
 
@@ -56,7 +60,7 @@ public class GameManager : MonoBehaviour {
 		MtaService.SetInstallChannel(channel);
 		MtaService.StartStatServiceWithAppKey(mta_appkey);
 
-
+		audioSource = gameObject.GetComponent<AudioSource>();
 		bestScore = PlayerPrefs.GetInt("BestScore");
 		currentScoreUI.GetComponent<tk2dTextMesh>().text = "0";
 		bestScoreUI.GetComponent<tk2dTextMesh>().text = ""+bestScore;
@@ -79,7 +83,8 @@ public class GameManager : MonoBehaviour {
 		if(currentGameStatus != GameStatus.Over)
 			return;
 
-
+		audioSource.clip = audioPlay;
+		audioSource.Play();
 		currentGameStatus = GameStatus.Ready;
 		startUI.GetComponent<Animator>().SetTrigger("Hide");
 		currentScore = 0;
@@ -107,6 +112,7 @@ public class GameManager : MonoBehaviour {
 
 		if(currentGameStatus == GameStatus.Over)
 			return;
+
 
 		playerControl.GetComponent<PlayerControl>().SetTap();
 		currentGameStatus = GameStatus.Over;
@@ -145,6 +151,8 @@ public class GameManager : MonoBehaviour {
 	void AddScore(){
 		Debug.Log("add score");
 		currentScore++;
+		audioSource.clip = audioPoint;
+		audioSource.Play();
 		Instantiate(socreAnima,socreAnima.transform.position,Quaternion.identity);
 		currentScoreUI.GetComponent<tk2dTextMesh>().text = ""+currentScore;
 		playerControl.GetComponent<PlayerControl>().SetScore(currentScore);
@@ -190,8 +198,8 @@ public class GameManager : MonoBehaviour {
 				StartGame();
 			}else{
 				playerRigid.velocity = Vector3.zero;
-				Debug.Log("Jump");
 				playerRigid.AddForce(new Vector2(0,jumpAddForce));
+				playerControl.GetComponent<PlayerControl>().playFly();
 			}
 
 		}

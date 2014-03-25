@@ -2,11 +2,12 @@
 using System.Collections;
 
 public class PlayerControl : MonoBehaviour {
-
-	public int groundAddForce = 100;
+	
 
 	public GameObject scoreText;
-	
+
+	public AudioClip audioHit;
+	public AudioClip audioFly;
 
 	Color color2 = new Color(0xee/255.0f,0xe4/255.0f,0xda/255.0f);
 	Color color4 = new Color(0xed/255.0f,0xe0/255.0f,0xc8/255.0f);
@@ -21,12 +22,12 @@ public class PlayerControl : MonoBehaviour {
 	Color color2048 = new Color(0xed/255.0f,0xc2/255.0f,0x2e/255.0f);
 	Color colorOther = new Color(0xed/255.0f,0xc2/255.0f,0x1f/255.0f);
 	
-
+	private AudioSource audioSource;
 	GameManager gameManager;
 	// Use this for initialization
 	void Start () {
 		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-
+		audioSource = gameObject.GetComponent<AudioSource>();
 	}
 	
 
@@ -34,6 +35,7 @@ public class PlayerControl : MonoBehaviour {
 	public void SetTap(){
 		gameObject.GetComponent<tk2dSprite>().color = color2;
 		scoreText.GetComponent<tk2dTextMesh>().text = "Tap";
+		scoreText.GetComponent<tk2dTextMesh>().color = new Color(0.39f,0.35f,0.31f);
 	}
 	public void SetScore(int score){
 		Color t;
@@ -73,21 +75,27 @@ public class PlayerControl : MonoBehaviour {
 
 	}
 
-
+	public void playFly(){
+		audioSource.clip = audioFly;
+		audioSource.Play();
+	}
 	void OnTriggerEnter2D(Collider2D coll){
 		bool gameOver = false;
 		if(coll.gameObject.name == "Floor"){
 			rigidbody2D.velocity = Vector3.zero;
 			gameOver = true;
-			rigidbody2D.AddForce(new Vector2(0,groundAddForce));
+			
 		}else if (coll.gameObject.name == "Celiling"){
 			rigidbody2D.velocity = Vector3.down;
 			gameOver = true;
 		}else if(coll.gameObject.tag == "Enemy"){
 			gameOver = true;
 		}
-		if(gameOver)
+		if(gameOver){
+			audioSource.clip = audioHit;
+			audioSource.Play();
 			gameManager.GameOver();
+		}
 	}
 
 
