@@ -177,9 +177,6 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 		addScoreTime += Time.deltaTime;
-//	}
-//
-//	void FixedUpdate(){
 		if(currentGameStatus == GameStatus.Over)
 			return;
 
