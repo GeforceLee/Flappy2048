@@ -6,7 +6,7 @@ public class PlayerControl : MonoBehaviour {
 
 	public GameObject scoreText;
 
-	public AudioClip audioHit;
+
 	public AudioClip audioFly;
 
 	Color color2 = new Color(0xee/255.0f,0xe4/255.0f,0xda/255.0f);
@@ -94,8 +94,7 @@ public class PlayerControl : MonoBehaviour {
 			gameOver = true;
 		}
 		if(gameOver){
-			audioSource.clip = audioHit;
-			audioSource.Play();
+
 			gameManager.GameOver();
 		}
 	}

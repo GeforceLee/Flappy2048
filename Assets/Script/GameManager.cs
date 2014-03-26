@@ -37,9 +37,15 @@ public class GameManager : MonoBehaviour {
 		{new Vector3(3.6f,2.16f,0),new Vector3(3.6f,0.72f,0)}
 	};
 
+
+	public GameObject IOSAD;
+	public GameObject AndAD;
+	GameObject AD;
+
 	private AudioSource audioSource;
 	public AudioClip audioPlay;
 	public AudioClip audioPoint;
+	public AudioClip audioHit;
 
 	private Vector3 startPosition = new Vector3(-2.16f,0,0);
 
@@ -47,20 +53,12 @@ public class GameManager : MonoBehaviour {
 		Application.targetFrameRate = 60;
 	}
 	void Start(){
-		
-
-		string channel = null;
-		string mta_appkey = null;
 #if UNITY_IPHONE
-		channel = "iOS";
-		mta_appkey = "Aqc1101259487";
+		AD = IOSAD;
 #elif UNITY_ANDROID
-		channel = "Android";
-		mta_appkey = "Aqc1101259487";
+		AD = AndAD;
 #endif
-		MtaService.SetInstallChannel(channel);
-		MtaService.StartStatServiceWithAppKey(mta_appkey);
-
+	
 		audioSource = gameObject.GetComponent<AudioSource>();
 		bestScore = PlayerPrefs.GetInt("BestScore");
 		currentScoreUI.GetComponent<tk2dTextMesh>().text = "0";
@@ -77,13 +75,11 @@ public class GameManager : MonoBehaviour {
 			else
 				Debug.Log ("Authentication failed");
 		});
-		GameOver();
+		ReadyGame();
 	}
 
 	public void ReadyGame(){
-		if(currentGameStatus != GameStatus.Over)
-			return;
-
+		AD.SetActive(false);
 		audioSource.clip = audioPlay;
 		audioSource.Play();
 		currentGameStatus = GameStatus.Ready;
@@ -91,7 +87,7 @@ public class GameManager : MonoBehaviour {
 		currentScore = 0;
 		bestScoreUI.GetComponent<tk2dTextMesh>().text = ""+bestScore;
 		currentScoreUI.GetComponent<tk2dTextMesh>().text = ""+currentScore;
-
+		playerFly = Instantiate(playerFlyPer,startPosition,Quaternion.identity) as GameObject;
 	}
 
 	public void StartGame(){
@@ -115,15 +111,19 @@ public class GameManager : MonoBehaviour {
 		if(currentGameStatus == GameStatus.Over)
 			return;
 
-
+		AD.SetActive(true);
 		currentGameStatus = GameStatus.Over;
 		startUI.GetComponent<Animator>().SetTrigger("Show");
 
-		if(playerControl !=null)
+		if(playerControl !=null){
+			audioSource.clip = audioHit;
+			audioSource.Play();
 			Destroy(playerControl);
+		}
+			
 
 		PlayerPrefs.SetInt("BestScore",bestScore);
-		playerFly = Instantiate(playerFlyPer,startPosition,Quaternion.identity) as GameObject;
+
 
 
 		GameObject[] enemys =  GameObject.FindGameObjectsWithTag("Enemy");
