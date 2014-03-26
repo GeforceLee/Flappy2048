@@ -15,7 +15,10 @@ public class GameManager : MonoBehaviour {
 	public GameObject startUI;
 	public GameObject bestScoreUI;
 	public GameObject currentScoreUI;
-	public GameObject playerControl;
+	private GameObject playerControl;
+	public GameObject playerControlPer;
+	private GameObject playerFly;
+	public GameObject playerFlyPer;
 	private float enemyUpdateTime = 0;
 	public GameStatus currentGameStatus = GameStatus.Start;
 	public GameObject socreAnima;
@@ -38,12 +41,10 @@ public class GameManager : MonoBehaviour {
 	public AudioClip audioPlay;
 	public AudioClip audioPoint;
 
-
-	private Rigidbody2D playerRigid;
+	private Vector3 startPosition = new Vector3(-2.16f,0,0);
 
 	void Awake(){
 		Application.targetFrameRate = 60;
-		playerRigid = playerControl.GetComponent<Rigidbody2D>();
 	}
 	void Start(){
 		
@@ -90,19 +91,20 @@ public class GameManager : MonoBehaviour {
 		currentScore = 0;
 		bestScoreUI.GetComponent<tk2dTextMesh>().text = ""+bestScore;
 		currentScoreUI.GetComponent<tk2dTextMesh>().text = ""+currentScore;
+
 	}
 
 	public void StartGame(){
 		if(currentGameStatus == GameStatus.Start)
 			return;
 
+		if(playerFly !=null)
+			Destroy(playerFly);
+
+		playerControl = Instantiate(playerControlPer,startPosition,Quaternion.identity) as GameObject;
+		playerControl.GetComponent<Rigidbody2D>().AddForce(new Vector2(0,150));
 		enemyUpdateTime = 0;
 		bestScore = PlayerPrefs.GetInt("BestScore");
-
-
-
-		playerRigid.isKinematic = false;
-		playerRigid.AddForce(new Vector2(0,150));
 
 		playerControl.GetComponent<PlayerControl>().SetScore(0);
 		currentGameStatus = GameStatus.Start;
@@ -114,13 +116,15 @@ public class GameManager : MonoBehaviour {
 			return;
 
 
-		playerControl.GetComponent<PlayerControl>().SetTap();
 		currentGameStatus = GameStatus.Over;
 		startUI.GetComponent<Animator>().SetTrigger("Show");
-		playerRigid.isKinematic = true;
-		playerRigid.velocity = Vector2.zero;
-		playerControl.transform.position = new Vector3(-2.16f,0,0);
+
+		if(playerControl !=null)
+			Destroy(playerControl);
+
 		PlayerPrefs.SetInt("BestScore",bestScore);
+		playerFly = Instantiate(playerFlyPer,startPosition,Quaternion.identity) as GameObject;
+
 
 		GameObject[] enemys =  GameObject.FindGameObjectsWithTag("Enemy");
 		foreach(GameObject en in enemys){
@@ -197,8 +201,8 @@ public class GameManager : MonoBehaviour {
 			if(currentGameStatus == GameStatus.Ready){
 				StartGame();
 			}else{
-				playerRigid.velocity = Vector3.zero;
-				playerRigid.AddForce(new Vector2(0,jumpAddForce));
+				playerControl.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+				playerControl.GetComponent<Rigidbody2D>().AddForce(new Vector2(0,jumpAddForce));
 				playerControl.GetComponent<PlayerControl>().playFly();
 			}
 
