@@ -8,7 +8,7 @@ public class AdMobPluginDemoScript : MonoBehaviour {
     void Start()
 	{
         // Pass in any extras you have as JSON.
-        string extras = "{\"color_bg\":\"AAAAFF\", \"color_bg_top\":\"FFFFFF\"}";
+		string extras = "{\"color_bg\":\"AAAAFF\", \"color_bg_top\":\"FFFFFF\"}";
 		AdMobPlugin.CreateBannerView("a15332743c3dec3", AdMobPlugin.AdSize.Banner, false);
         print("Created Banner View");
         AdMobPlugin.RequestBannerAd(true, extras);
