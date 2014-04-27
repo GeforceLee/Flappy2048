@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour {
 	private int currentScore = 0;
 	private int bestScore = 0;
 
+	[HideInInspector]
+	public bool playSound;
 	private string gameCenterKey = "com.royalgame.flappy2048.bestscore";
 	private bool enableGameCenter = false;
 	public Vector3[,] allPositions = new Vector3[3,2]{ 
@@ -51,6 +53,7 @@ public class GameManager : MonoBehaviour {
 
 	void Awake(){
 		Application.targetFrameRate = 60;
+		playSound = PlayerPrefs.GetInt("sound")==1?false:true;
 	}
 	void Start(){
 #if UNITY_IPHONE
@@ -81,7 +84,10 @@ public class GameManager : MonoBehaviour {
 	public void ReadyGame(){
 		AD.SetActive(false);
 		audioSource.clip = audioPlay;
-		audioSource.Play();
+		if(playSound){
+			audioSource.Play();
+		}
+
 		currentGameStatus = GameStatus.Ready;
 		startUI.GetComponent<Animator>().SetTrigger("Hide");
 		currentScore = 0;
@@ -117,7 +123,9 @@ public class GameManager : MonoBehaviour {
 
 		if(playerControl !=null){
 			audioSource.clip = audioHit;
-			audioSource.Play();
+			if(playSound){
+				audioSource.Play();
+			}
 			Destroy(playerControl);
 		}
 			
@@ -156,7 +164,10 @@ public class GameManager : MonoBehaviour {
 		Debug.Log("add score");
 		currentScore++;
 		audioSource.clip = audioPoint;
-		audioSource.Play();
+		if(playSound){
+			audioSource.Play();
+		}
+
 		Instantiate(socreAnima,socreAnima.transform.position,Quaternion.identity);
 		currentScoreUI.GetComponent<tk2dTextMesh>().text = ""+currentScore;
 		playerControl.GetComponent<PlayerControl>().SetScore(currentScore);
@@ -166,7 +177,10 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-
+	public void BackToStart(){
+		AD.SetActive(false);
+		Application.LoadLevel("StartScene");
+	}
 
 
 	void CreateEmeny(){

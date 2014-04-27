@@ -25,7 +25,7 @@ public class UMeng : MonoBehaviour {
 		
 		MobclickAgent.StartWithAppKeyAndReportPolicyAndChannelId("533276a656240b47cd085fb9",6,"iOS");
 		
-		MobclickAgent.SetAppVersion("1.0");
+		MobclickAgent.SetAppVersion("1.1");
 		
 		MobclickAgent.SetLogSendInterval(20);
 		

@@ -1,8 +1,11 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="../../candy/SweetCat/Assets/Code/AppleItem.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Plugins/MobclickAgent.cs">
     <Files>
-      <File FileName="../../candy/SweetCat/Assets/Code/AppleItem.cs" Line="9" Column="16" />
+      <File FileName="Assets/Script/GameManager2048.cs" Line="243" Column="68" />
+      <File FileName="Assets/Script/StartGame.cs" Line="41" Column="4" />
+      <File FileName="Assets/Script/GameManager.cs" Line="150" Column="28" />
+      <File FileName="Assets/Plugins/MobclickAgent.cs" Line="28" Column="22" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

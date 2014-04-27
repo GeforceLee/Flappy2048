@@ -79,7 +79,10 @@ public class PlayerControl : MonoBehaviour {
 		if(audioSource.isPlaying)
 			return;
 		audioSource.clip = audioFly;
-		audioSource.Play();
+		if(gameManager.playSound){
+			audioSource.Play();
+		}
+
 	}
 	void OnTriggerEnter2D(Collider2D coll){
 		bool gameOver = false;
