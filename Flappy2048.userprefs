@@ -1,8 +1,8 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Plugins/Android/AndroidManifest.xml">
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="../../candy/SweetCat/Assets/Code/AppleItem.cs">
     <Files>
-      <File FileName="Assets/Plugins/Android/AndroidManifest.xml" Line="25" Column="17" />
+      <File FileName="../../candy/SweetCat/Assets/Code/AppleItem.cs" Line="9" Column="16" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

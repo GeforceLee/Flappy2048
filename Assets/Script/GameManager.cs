@@ -207,6 +207,12 @@ public class GameManager : MonoBehaviour {
 			}
 
 		}
+
+
+		if ( Application.platform == RuntimePlatform.Android &&(Input.GetKeyDown(KeyCode.Escape) ))
+		{
+			Application.Quit();
+		}
 	}
 
 }
